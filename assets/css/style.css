@@ -505,6 +505,39 @@ button { font-family: inherit; cursor: pointer; }
 .stepper .step .t { font-family: var(--font-display); font-weight: 600; font-size: 0.9rem; }
 .stepper .step .t small { display: block; font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 400; }
 
+/* Onboarding form — Step 1 */
+.step-card { border-color: var(--line-strong); }
+.onform { display: grid; gap: 1.1rem; }
+.unit-field { max-width: 440px; }
+.su-list { display: grid; gap: 1rem; }
+.subunit { border: 1px solid var(--line-strong); border-radius: var(--r); background: var(--surface-2); padding: 1.05rem 1.1rem; }
+.su-head { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; margin-bottom: 0.9rem; }
+.su-badge { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal-2); font-weight: 500; }
+.su-remove, .ad-remove { flex: none; display: inline-grid; place-items: center; border-radius: 9px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--muted); transition: color var(--fast), border-color var(--fast), background var(--fast); }
+.su-remove { width: 32px; height: 32px; }
+.ad-remove { width: 40px; height: 40px; }
+.su-remove:hover, .ad-remove:hover { color: var(--out); border-color: color-mix(in srgb,var(--out) 55%,transparent); background: var(--out-dim); }
+.su-remove svg, .ad-remove svg { width: 15px; height: 15px; }
+.su-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
+.admins { margin-top: 1rem; padding-top: 0.95rem; border-top: 1px dashed var(--line-strong); }
+.admins-label { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem; font-family: var(--font-display); font-weight: 600; font-size: 0.92rem; margin-bottom: 0.7rem; }
+.admins-label .hint { font-size: 0.74rem; }
+.admin-list { display: grid; gap: 0.7rem; }
+.admin-row { display: grid; grid-template-columns: 1.1fr 1fr auto; gap: 0.6rem; align-items: start; grid-template-areas: "name nric x"; }
+.admin-row .ad-name-f { grid-area: name; }
+.admin-row .ad-nric-f { grid-area: nric; }
+.admin-row .ad-remove { grid-area: x; margin-top: 1px; }
+.btn-add { border-style: dashed; justify-self: start; }
+.btn-add-admin { border-style: dashed; margin-top: 0.75rem; padding: 0.5rem 0.9rem; font-size: 0.85rem; }
+.form-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.7rem 1.1rem; margin-top: 0.3rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+.form-actions .hint { max-width: 42ch; }
+.guide-eg { margin-top: 0.55rem; font-size: 0.82rem; color: var(--muted); }
+.feature .guide-eg + .pill, .feature .pill { margin-top: 0.9rem; }
+@media (max-width: 620px) {
+  .su-grid { grid-template-columns: 1fr; }
+  .admin-row { grid-template-columns: 1fr auto; grid-template-areas: "name x" "nric nric"; }
+}
+
 .checklist { display: grid; gap: 0.6rem; }
 .check {
   display: grid; grid-template-columns: 26px 1fr auto; gap: 0.8rem; align-items: start;
@@ -557,10 +590,12 @@ button { font-family: inherit; cursor: pointer; }
 .vfield label { font-family: var(--font-display); font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 0.4rem; }
 .vfield .row { display: flex; gap: 0.6rem; align-items: stretch; }
 .vfield input {
-  flex: 1; font-family: var(--font-mono); font-size: 0.92rem; letter-spacing: 0.02em;
+  flex: 1; width: 100%; font-family: var(--font-mono); font-size: 0.92rem; letter-spacing: 0.02em;
   padding: 0.7rem 0.9rem; border-radius: 11px; background: var(--bg-2); color: var(--ink);
   border: 1.5px solid var(--line-strong); transition: border-color var(--fast), box-shadow var(--fast);
 }
+.vfield input::placeholder { color: color-mix(in srgb, var(--muted) 80%, transparent); }
+.lbl-hint { font-family: var(--font-mono); font-weight: 400; font-size: 0.78em; color: var(--muted); }
 .vfield input:focus { outline: none; border-color: var(--signal); box-shadow: var(--ring); }
 .vfield input.ok { border-color: var(--in); }
 .vfield input.bad { border-color: var(--out); }

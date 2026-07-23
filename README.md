@@ -9,15 +9,14 @@ real-time visibility, frictionless scalability, and an unbreakable audit trail.
 
 ## What's inside
 
-A single-page app (hash-routed, no build step) with five views:
+A single-page app (hash-routed, no build step) with four views:
 
 | View | What it does |
 |------|--------------|
 | **Overview** | What KeyX is, the essentials, and the three core functionalities, with a live keypress-console mock. |
 | **How it works** | An interactive **Secure Transfer Protocol** demo — generate a QR handover code, watch the 55-second window, and transfer custody between two devices. Plus the system roles (UA, Issuers & Key Holders, SingPass). |
-| **Live demo** | A working model of the **Quickglance dashboard** — tap any bunch to sign a key in/out, watch the status LEDs and counters update, and see events written to an audit ledger (exportable to CSV). Includes a "Simulate duty day" auto-runner. |
 | **Benefits** | The five pillars: accountability, real-time visibility, frictionless scalability, dynamic access control, and unbreakable audit trails. |
-| **Onboard** | A guided **two-step checklist** (progress saved on-device) with copyable formats, a live **format checker** for account names & NRIC, downloadable mass-upload CSV templates, and an admin playbook covering keypresses, adding keys, whitelisting issuers, and deleting keys — with the critical rules called out. |
+| **Onboard** | **Step 1 is a live form** — enter your unit and each sub-unit (company / branch) that needs an account, its `UNIT_COY` account name, and admin users (full name + NRIC), with inline validation and add/remove for sub-units and admins. One tap builds a ready-to-send **WhatsApp message to Ranee**. **Step 2** is an internal reference for building the keypress once you have access, plus an admin playbook (managing keypresses, adding keys, whitelisting issuers, deleting keys) with downloadable mass-upload CSV templates and the critical rules called out. |
 
 ### Highlights
 
@@ -49,7 +48,7 @@ The included `.nojekyll` keeps the `assets/` folder served as-is.
 index.html              # all markup + the five views + inline icon sprite
 assets/css/style.css    # design system: "Digital Keypress Console"
 assets/css/fonts.css    # embedded woff2 (IBM Plex Sans/Mono, Chakra Petch)
-assets/js/app.js        # routing, theme, QR handover, dashboard, onboarding wizard
+assets/js/app.js        # routing, theme, QR handover demo, onboarding form + validation
 assets/img/favicon.svg  # KeyX crossed-key emblem
 ```
 

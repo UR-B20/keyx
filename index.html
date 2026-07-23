@@ -48,6 +48,9 @@
     <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-.5 4"/><path d="M20 4v5h-5"/></symbol>
     <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h8l4 4v16H6z"/><path d="M14 2v4h4M9 13h6M9 17h6M9 9h2"/></symbol>
     <symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5M3 17l9 5 9-5" opacity=".55"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></symbol>
   </defs>
 </svg>
 
@@ -71,7 +74,6 @@
     <nav class="nav-desktop" aria-label="Primary">
       <a class="nav-link" href="#/" data-route="/"><svg><use href="#i-grid"/></svg>Overview</a>
       <a class="nav-link" href="#/how" data-route="/how"><svg><use href="#i-shield"/></svg>How it works</a>
-      <a class="nav-link" href="#/demo" data-route="/demo"><svg><use href="#i-eye"/></svg>Live demo</a>
       <a class="nav-link" href="#/benefits" data-route="/benefits"><svg><use href="#i-bolt"/></svg>Benefits</a>
       <a class="nav-link" href="#/onboard" data-route="/onboard"><svg><use href="#i-rocket"/></svg>Onboard</a>
     </nav>
@@ -97,7 +99,7 @@
           <p class="sub" data-reveal data-reveal-d="1">KeyX replaces the physical keypress book with a SingPass-verified digital ledger. Every issue, return, and handover is logged automatically — so your keys are exactly where they belong, precisely when they matter.</p>
           <div class="cta-row" data-reveal data-reveal-d="2">
             <a class="btn btn-primary btn-lg" href="#/onboard"><svg><use href="#i-rocket"/></svg>Onboard your unit</a>
-            <a class="btn btn-lg" href="#/demo"><svg><use href="#i-play"/></svg>Try the live demo</a>
+            <a class="btn btn-lg" href="#/how"><svg><use href="#i-shield"/></svg>See how it works</a>
           </div>
           <div class="meta-row" data-reveal data-reveal-d="3">
             <div class="m"><div class="n mono">55s</div><div class="l">Secure QR window</div></div>
@@ -272,63 +274,6 @@
     </div>
   </section>
 
-  <!-- ============================== LIVE DEMO ============================== -->
-  <section class="view" data-view="/demo" aria-label="Live demo">
-    <div class="section">
-      <div class="wrap">
-        <div class="section-head">
-          <span class="eyebrow">Quickglance dashboard · interactive</span>
-          <h2 class="section-title" data-reveal>See the whole keypress at a glance</h2>
-          <p class="lead" data-reveal data-reveal-d="1">This is a working model of the KeyX Quickglance board. Tap any bunch to draw or return its key — the status LED flips, the counts update, and the event is written to the audit ledger in real time. Or press <strong>Simulate duty day</strong> and watch it run.</p>
-        </div>
-
-        <div class="demo-shell">
-          <div class="card board" data-reveal>
-            <div class="tabs" id="kpTabs" role="tablist" aria-label="Keypresses">
-              <button class="tab active" role="tab" data-kp="0">Keypress 1</button>
-              <button class="tab" role="tab" data-kp="1">Keypress 2</button>
-            </div>
-            <div class="summary">
-              <div class="kpi in"><div class="n mono" id="kpiIn">0</div><div class="l">Available · IN</div></div>
-              <div class="kpi out"><div class="n mono" id="kpiOut">0</div><div class="l">Drawn · OUT</div></div>
-              <div class="kpi"><div class="n mono" id="kpiTotal">0</div><div class="l">Total bunches</div></div>
-            </div>
-            <div class="bunch-grid" id="bunchGrid"></div>
-          </div>
-
-          <div class="demo-side">
-            <div class="card" data-reveal data-reveal-d="1">
-              <div class="demo-controls">
-                <button class="btn btn-primary" id="simBtn" type="button"><svg><use href="#i-play"/></svg>Simulate duty day</button>
-                <button class="btn btn-ghost" id="resetBtn" type="button"><svg><use href="#i-refresh"/></svg>Reset</button>
-              </div>
-              <p class="hint mt-2">Tip: tapping a bunch is exactly how an Issuer signs a key <span class="text-in">in</span> or <span class="text-out">out</span> on their phone.</p>
-            </div>
-
-            <div class="card ledger" data-reveal data-reveal-d="2">
-              <div class="lg-head">
-                <h4>Audit ledger</h4>
-                <button class="copy-btn" id="exportBtn" type="button"><svg><use href="#i-export"/></svg>Export CSV</button>
-              </div>
-              <div class="rows">
-                <table>
-                  <thead><tr><th>Bunch</th><th>Keys</th><th>Time out</th><th>Time in</th></tr></thead>
-                  <tbody id="ledgerBody"></tbody>
-                </table>
-                <div class="empty" id="ledgerEmpty">No movements yet — tap a bunch to begin.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="callout mt-3" style="border-color:color-mix(in srgb,var(--signal) 40%,transparent);background:var(--signal-dim);" data-reveal>
-          <div class="ico" style="background:color-mix(in srgb,var(--signal) 20%,transparent);color:var(--signal-2);"><svg><use href="#i-eye"/></svg></div>
-          <div><h4>Targeted vision, by design</h4><p>Issuers are algorithmically restricted to view only the specific keypresses they are whitelisted to manage — compartmentalizing operational intelligence so no one sees more than their duty requires.</p></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- ============================== BENEFITS ============================== -->
   <section class="view" data-view="/benefits" aria-label="Benefits">
     <div class="section">
@@ -418,133 +363,71 @@
         <div class="section-head">
           <span class="eyebrow">Onboard your unit</span>
           <h2 class="section-title" data-reveal>Two steps to a live keypress</h2>
-          <p class="lead" data-reveal data-reveal-d="1">Gather a few lists, hand them over, and you're ready to use. Tick items off as you prepare them — your progress is saved on this device.</p>
-        </div>
-
-        <div class="card readiness mt-2" data-reveal>
-          <div class="ring" aria-hidden="true">
-            <svg viewBox="0 0 62 62"><circle class="tr" cx="31" cy="31" r="26"/><circle class="pr" id="readyRing" cx="31" cy="31" r="26" style="--c:163"/></svg>
-            <span class="pct mono" id="readyPct">0%</span>
-          </div>
-          <div class="txt">
-            <h4 id="readyTitle">Let's get your unit ready</h4>
-            <p id="readySub">0 of 0 items prepared</p>
-          </div>
-          <button class="btn btn-ghost" id="clearProgress" type="button" style="margin-left:auto;"><svg><use href="#i-refresh"/></svg>Reset checklist</button>
+          <p class="lead" data-reveal data-reveal-d="1">Fill in your unit's details below and send them to Ranee to get your KeyX accounts created. Once you have access, use the Step&nbsp;2 guide to build your keypress. Nothing you type here is stored or sent until you tap <strong>Send</strong>.</p>
         </div>
 
         <div class="stepper mt-2" data-reveal>
-          <div class="step" id="stp1"><span class="b">1</span><span class="t">Access to KeyX<small>Accounts &amp; admins</small></span></div>
-          <div class="step" id="stp2"><span class="b">2</span><span class="t">Set up your account<small>Register &amp; whitelist</small></span></div>
+          <div class="step" id="stp1"><span class="b">1</span><span class="t">Register your accounts<small>Fill in &amp; send to Ranee</small></span></div>
+          <div class="step" id="stp2"><span class="b">2</span><span class="t">Build your keypress<small>Internal guide, once live</small></span></div>
           <div class="step" id="stp3"><span class="b"><svg style="width:16px;height:16px" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m4 10 4 4 8-9"/></svg></span><span class="t">Ready to use<small>Go live</small></span></div>
         </div>
 
-        <!-- STEP 1 -->
-        <div class="stack mt-3">
-          <div class="card" data-reveal>
-            <div class="flex items-center between" style="flex-wrap:wrap;gap:.6rem;">
-              <h3 style="font-size:1.25rem;"><span class="mono text-muted" style="font-size:.8em;">STEP 1 ·</span> Get access to KeyX</h3>
-              <span class="pill">For your S1 / admin</span>
-            </div>
-            <p class="text-muted mt-1" style="font-size:.93rem;">Send these two lists to provision your unit's admin accounts.</p>
-
-            <div class="checklist mt-2">
-              <div class="check" role="button" tabindex="0" aria-pressed="false" data-check="s1-accounts" data-step="1">
-                <span class="box"><svg><use href="#i-check"/></svg></span>
-                <span class="c-body">
-                  <h5>Name the accounts you need</h5>
-                  <p>One account per company / branch, in <code>UNIT_COY</code> format.</p>
-                  <div class="fmt"><span><span class="k">e.g.&nbsp;</span>15C4I_HQ_COY&nbsp;·&nbsp;15C4I_C4_COY_1&nbsp;·&nbsp;15C4I_ISR</span><button class="copy-btn" type="button" data-copy="15C4I_HQ_COY, 15C4I_C4_COY_1, 15C4I_ISR"><svg><use href="#i-copy"/></svg>Copy</button></div>
-                </span>
-                <span class="c-tag"><span class="pill signal">Required</span></span>
-              </div>
-
-              <div class="check" role="button" tabindex="0" aria-pressed="false" data-check="s1-admins" data-step="1">
-                <span class="box"><svg><use href="#i-check"/></svg></span>
-                <span class="c-body">
-                  <h5>Nominal roll of admin users</h5>
-                  <p>For each account, list admins as <strong>Full Name &amp; Full NRIC</strong>. Recommended admins, for audit purposes: <strong>OC, CSM, S2, INT WO</strong>.</p>
-                  <div class="fmt"><span><span class="k">format&nbsp;</span>Full Name&nbsp;&amp;&nbsp;Full NRIC</span><button class="copy-btn" type="button" data-copy="Full Name & Full NRIC"><svg><use href="#i-copy"/></svg>Copy</button></div>
-                </span>
-                <span class="c-tag"><span class="pill signal">Required</span></span>
-              </div>
-            </div>
+        <!-- STEP 1 — FORM -->
+        <div class="card step-card mt-3" data-reveal>
+          <div class="flex items-center between" style="flex-wrap:wrap;gap:.6rem;">
+            <h3 style="font-size:1.25rem;"><span class="mono text-muted" style="font-size:.8em;">STEP 1 ·</span> Register your accounts</h3>
+            <span class="pill signal"><svg style="width:13px;height:13px" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#i-send"/></svg>&nbsp;Send to Ranee</span>
           </div>
+          <p class="text-muted mt-1" style="font-size:.93rem;max-width:60ch;">List your unit and each sub-unit that needs its own KeyX account, with the admin users who'll manage it. We'll turn it into a ready-to-send WhatsApp message. Each sub-unit (company / branch) creates one account.</p>
 
-          <!-- STEP 2 -->
-          <div class="card" data-reveal>
-            <div class="flex items-center between" style="flex-wrap:wrap;gap:.6rem;">
-              <h3 style="font-size:1.25rem;"><span class="mono text-muted" style="font-size:.8em;">STEP 2 ·</span> Set up your account</h3>
-              <span class="pill admin">Sent to KeyX</span>
-            </div>
-            <p class="text-muted mt-1" style="font-size:.93rem;">Hand over your current register and rolls, and KeyX builds your keypress.</p>
-
-            <div class="checklist mt-2">
-              <div class="check" role="button" tabindex="0" aria-pressed="false" data-check="s2-register" data-step="2">
-                <span class="box"><svg><use href="#i-check"/></svg></span>
-                <span class="c-body">
-                  <h5>Current key-press register</h5>
-                  <p>List each keypress as <strong>Keypress Name &amp; Bunch Number</strong>.</p>
-                  <div class="fmt"><span><span class="k">e.g.&nbsp;</span>Keypress 1 (13 bunches)</span><button class="copy-btn" type="button" data-copy="Keypress 1 (13 bunches)"><svg><use href="#i-copy"/></svg>Copy</button></div>
-                </span>
-                <span class="c-tag"><span class="pill signal">Required</span></span>
-              </div>
-
-              <div class="check" role="button" tabindex="0" aria-pressed="false" data-check="s2-roll" data-step="2">
-                <span class="box"><svg><use href="#i-check"/></svg></span>
-                <span class="c-body">
-                  <h5>Nominal roll of users</h5>
-                  <p>List as <strong>Full Name &amp; Full NRIC &amp; ORD Date</strong>. Recommended: add all personnel in the company / branch.</p>
-                  <div class="fmt"><span><span class="k">format&nbsp;</span>Full Name&nbsp;&amp;&nbsp;Full NRIC&nbsp;&amp;&nbsp;ORD Date</span><button class="copy-btn" type="button" data-copy="Full Name & Full NRIC & ORD Date"><svg><use href="#i-copy"/></svg>Copy</button></div>
-                </span>
-                <span class="c-tag"><span class="pill signal">Required</span></span>
-              </div>
-
-              <div class="check" role="button" tabindex="0" aria-pressed="false" data-check="s2-whitelist" data-step="2">
-                <span class="box"><svg><use href="#i-check"/></svg></span>
-                <span class="c-body">
-                  <h5>Flag sensitive keys for Receiver Whitelist</h5>
-                  <p>Only activate the Receiver Whitelist for sensitive keys that already have an authorisation letter in your current keypress — e.g. <strong>Server Room keys</strong>.</p>
-                </span>
-                <span class="c-tag"><span class="pill">Optional</span></span>
-              </div>
+          <form id="onboardForm" class="onform mt-2" novalidate>
+            <div class="vfield unit-field">
+              <label for="unitName">Name of unit</label>
+              <input id="unitName" type="text" autocomplete="off" placeholder="e.g. 15C4I" />
             </div>
 
-            <div class="card mt-2" style="background:var(--surface-2);border-style:dashed;">
-              <div class="contact-card">
-                <div class="av"><svg><use href="#i-phone"/></svg></div>
-                <div class="who"><div class="n">Send Step 2 to Ranee</div><div class="r">WhatsApp · +65 8782 0742 · KeyX onboarding</div></div>
-                <a class="btn btn-in" href="https://wa.me/6587820742" target="_blank" rel="noopener"><svg><use href="#i-phone"/></svg>Message on WhatsApp</a>
-              </div>
+            <div class="su-list" id="subunits"><!-- sub-unit cards injected by app.js --></div>
+
+            <button class="btn btn-ghost btn-add" id="addSubunit" type="button"><svg><use href="#i-plus"/></svg>Add another branch / coy</button>
+
+            <div class="form-actions">
+              <button class="btn btn-in btn-lg" id="sendStep1" type="button"><svg><use href="#i-phone"/></svg>Send Step&nbsp;1 to Ranee</button>
+              <span class="hint">Opens WhatsApp to <span class="mono">+65 8782 0742</span> with your details filled in — review before you send.</span>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>
 
-    <!-- FORMAT VALIDATOR -->
+    <!-- STEP 2 — INTERNAL GUIDE -->
     <div class="section">
       <div class="wrap">
         <div class="section-head">
-          <span class="eyebrow">Get the formatting right the first time</span>
-          <h2 class="section-title" data-reveal>Format checker</h2>
-          <p class="lead" data-reveal data-reveal-d="1">Two rules cause almost every onboarding hiccup. Test your entries here before you send them.</p>
+          <span class="eyebrow">Step 2 · once your accounts are live</span>
+          <h2 class="section-title" data-reveal>Build your keypress</h2>
+          <p class="lead" data-reveal data-reveal-d="1">After Step&nbsp;1 you'll have access to the KeyX platform. Prepare these internally, then create the keypress inside each account. This is a reference for your own use — nothing here is sent to us.</p>
         </div>
-        <div class="grid g-2">
-          <div class="card validator" data-reveal>
-            <div class="vfield">
-              <label for="acctIn">Account name · <span class="text-muted mono" style="font-weight:400;">UNIT_COY</span></label>
-              <div class="row"><input id="acctIn" type="text" spellcheck="false" autocomplete="off" placeholder="15C4I_HQ_COY" aria-describedby="acctMsg"/></div>
-              <div class="vmsg idle" id="acctMsg">Uppercase letters, digits and underscores — at least one underscore.</div>
-            </div>
-          </div>
-          <div class="card validator" data-reveal data-reveal-d="1">
-            <div class="vfield">
-              <label for="nricIn">NRIC · <span class="text-warn mono" style="font-weight:400;">MUST be ALL CAPS</span></label>
-              <div class="row"><input id="nricIn" type="text" spellcheck="false" autocomplete="off" placeholder="S1234567A" aria-describedby="nricMsg"/></div>
-              <div class="vmsg idle" id="nricMsg">KeyX matches this exact text to the SingPass login — lowercase locks the user out.</div>
-            </div>
-          </div>
+
+        <div class="grid g-3" data-reveal>
+          <article class="card feature">
+            <div class="ico"><svg><use href="#i-book"/></svg></div>
+            <h3>Current key-press register</h3>
+            <p>List each keypress as <strong>Keypress Name &amp; Bunch Number</strong>.</p>
+            <p class="guide-eg mono">e.g. Keypress 1 (13 bunches)</p>
+            <span class="pill signal">Required</span>
+          </article>
+          <article class="card feature">
+            <div class="ico"><svg><use href="#i-users"/></svg></div>
+            <h3>Nominal roll of users</h3>
+            <p>List each person as <strong>Full Name &amp; Full NRIC &amp; ORD Date</strong>. Recommended: add all personnel in the company / branch.</p>
+            <span class="pill signal">Required</span>
+          </article>
+          <article class="card feature warn">
+            <div class="ico"><svg><use href="#i-lock"/></svg></div>
+            <h3>Receiver whitelist</h3>
+            <p>Only activate for sensitive keys that already have an authorisation letter in your keypress — e.g. <strong>Server Room keys</strong>.</p>
+            <span class="pill">Optional</span>
+          </article>
         </div>
       </div>
     </div>
@@ -553,9 +436,9 @@
     <div class="section">
       <div class="wrap">
         <div class="section-head">
-          <span class="eyebrow">Admin playbook</span>
-          <h2 class="section-title" data-reveal>Running KeyX day to day</h2>
-          <p class="lead" data-reveal data-reveal-d="1">Once you're live, here's how Unit Administrators build and maintain the keypress. Grab the mass-upload templates as you go.</p>
+          <span class="eyebrow">Admin playbook · for reference</span>
+          <h2 class="section-title" data-reveal>Creating &amp; running the keypress</h2>
+          <p class="lead" data-reveal data-reveal-d="1">Inside your account, here's how Unit Administrators build and maintain the keypress. Mass-upload templates are here when you need them.</p>
         </div>
 
         <div class="acc" id="adminAcc" data-reveal>
@@ -647,7 +530,6 @@
         <nav class="fnav" aria-label="Footer">
           <a href="#/">Overview</a>
           <a href="#/how">How it works</a>
-          <a href="#/demo">Live demo</a>
           <a href="#/benefits">Benefits</a>
           <a href="#/onboard">Onboard your unit</a>
         </nav>
@@ -666,7 +548,6 @@
 <nav class="tabbar" aria-label="Primary mobile">
   <a href="#/" data-route="/"><svg><use href="#i-grid"/></svg>Overview</a>
   <a href="#/how" data-route="/how"><svg><use href="#i-shield"/></svg>How</a>
-  <a href="#/demo" data-route="/demo"><svg><use href="#i-eye"/></svg>Demo</a>
   <a href="#/benefits" data-route="/benefits"><svg><use href="#i-bolt"/></svg>Benefits</a>
   <a href="#/onboard" data-route="/onboard"><svg><use href="#i-rocket"/></svg>Onboard</a>
 </nav>

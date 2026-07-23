@@ -75,7 +75,6 @@
     navLinks.forEach((a) => a.classList.toggle('active', a.dataset.route === route));
     const view = views.find((v) => v.dataset.view === route);
     if (view) revealIn(view);
-    stopSim();                                  // pause the dashboard sim when leaving demo
     window.scrollTo({ top: 0, behavior: REDUCE ? 'auto' : 'smooth' });
   }
 
@@ -209,202 +208,129 @@
     reset();
   })();
 
-  /* ================================================ Live dashboard demo == */
-  let stopSim = () => {};
-  (function dashboard() {
-    const grid = $('#bunchGrid'), body = $('#ledgerBody'), empty = $('#ledgerEmpty');
-    const kpiIn = $('#kpiIn'), kpiOut = $('#kpiOut'), kpiTotal = $('#kpiTotal');
-    const tabs = $$('#kpTabs .tab'), simBtn = $('#simBtn'), resetBtn = $('#resetBtn'), exportBtn = $('#exportBtn');
-    if (!grid) return;
+  /* ============================================= Onboarding form ======= */
+  (function onboardingForm() {
+    const form = document.getElementById('onboardForm');
+    if (!form) return;
+    const list = document.getElementById('subunits');
+    const unitInput = document.getElementById('unitName');
+    const WA = 'https://wa.me/6587820742';
+    const svg = (id) => '<svg><use href="#' + id + '"/></svg>';
 
-    const mk = (n, offset) => Array.from({ length: n }, (_, i) => ({
-      name: `Bunch ${i + 1}`, keys: 1 + ((i + offset) % 4), drawn: false,
-    }));
-    const KP = [
-      { label: 'KP1', bunches: mk(24, 0) },
-      { label: 'KP2', bunches: mk(16, 2) },
-    ];
-    let cur = 0;
-    let ledger = [];       // {kp, name, keys, out:Date, in:Date|null}
-    let simId = null;
-
-    function renderGrid() {
-      const bs = KP[cur].bunches;
-      grid.innerHTML = bs.map((b, i) =>
-        `<button class="bunch${b.drawn ? ' out' : ''}" type="button" data-i="${i}" aria-pressed="${b.drawn}" title="${b.keys} key${b.keys > 1 ? 's' : ''}">
-           <span class="led"></span>
-           <span class="meta"><span class="nm">${b.name}</span><span class="stt">${b.drawn ? 'Drawn' : 'Available'}</span></span>
-         </button>`).join('');
-      renderKPIs();
-    }
-    function renderKPIs() {
-      const bs = KP[cur].bunches;
-      const drawn = bs.filter((b) => b.drawn).length;
-      kpiIn.textContent = bs.length - drawn;
-      kpiOut.textContent = drawn;
-      kpiTotal.textContent = bs.length;
-    }
-    function renderLedger() {
-      if (!ledger.length) { empty.style.display = ''; body.innerHTML = ''; return; }
-      empty.style.display = 'none';
-      body.innerHTML = ledger.slice().reverse().slice(0, 40).map((e) =>
-        `<tr><td>${e.kp} · ${e.name}</td><td>${e.keys}</td>
-           <td class="st-out">${timeStr(e.out)}</td>
-           <td>${e.in ? `<span class="st-in">${timeStr(e.in)}</span>` : '<span class="text-muted">— out —</span>'}</td></tr>`
-      ).join('');
-      const first = body.querySelector('tr');
-      if (first && !REDUCE) first.classList.add('newrow');
+    function adminRow() {
+      const row = document.createElement('div');
+      row.className = 'admin-row';
+      row.innerHTML =
+        '<div class="vfield ad-name-f"><input class="ad-name" type="text" autocomplete="off" placeholder="Admin full name"></div>' +
+        '<div class="vfield ad-nric-f"><input class="ad-nric" data-validate="nric" type="text" spellcheck="false" autocomplete="off" placeholder="NRIC · ALL CAPS"><div class="vmsg idle"></div></div>' +
+        '<button class="ad-remove" type="button" aria-label="Remove admin">' + svg('i-x') + '</button>';
+      row.querySelector('.ad-remove').addEventListener('click', () => {
+        const listEl = row.parentElement;
+        if (listEl.children.length > 1) row.remove();
+        else toast('Keep at least one admin', 'warn');
+      });
+      return row;
     }
 
-    function toggleBunch(i, silent) {
-      const b = KP[cur].bunches[i];
-      const nowD = new Date();
-      if (!b.drawn) {
-        b.drawn = true;
-        ledger.push({ kp: KP[cur].label, name: b.name, keys: b.keys, out: nowD, in: null });
-      } else {
-        b.drawn = false;
-        for (let j = ledger.length - 1; j >= 0; j--) {
-          if (ledger[j].kp === KP[cur].label && ledger[j].name === b.name && !ledger[j].in) { ledger[j].in = nowD; break; }
-        }
+    function subunit() {
+      const card = document.createElement('div');
+      card.className = 'subunit';
+      card.innerHTML =
+        '<div class="su-head"><span class="su-badge">Sub-unit</span>' +
+          '<button class="su-remove" type="button" aria-label="Remove sub-unit">' + svg('i-x') + '</button></div>' +
+        '<div class="su-grid">' +
+          '<div class="vfield"><label>Branch / Coy</label><input class="su-name" type="text" autocomplete="off" placeholder="e.g. HQ Coy"></div>' +
+          '<div class="vfield"><label>Account name <span class="lbl-hint">UNIT_COY</span></label><input class="su-account" data-validate="account" type="text" spellcheck="false" autocomplete="off" placeholder="e.g. 15C4I_HQ_COY"><div class="vmsg idle"></div></div>' +
+        '</div>' +
+        '<div class="admins"><div class="admins-label">Admin users <span class="hint">Recommended: OC, CSM, S2, INT WO</span></div>' +
+          '<div class="admin-list"></div>' +
+          '<button class="btn btn-ghost btn-add-admin" type="button">' + svg('i-plus') + 'Add admin</button></div>';
+      card.querySelector('.admin-list').appendChild(adminRow());
+      card.querySelector('.btn-add-admin').addEventListener('click', () => {
+        card.querySelector('.admin-list').appendChild(adminRow());
+      });
+      card.querySelector('.su-remove').addEventListener('click', () => {
+        if (list.children.length > 1) { card.remove(); renumber(); }
+        else toast('Keep at least one sub-unit', 'warn');
+      });
+      return card;
+    }
+
+    function renumber() {
+      $$('.subunit', list).forEach((c, i) => {
+        c.querySelector('.su-badge').textContent = 'Sub-unit ' + (i + 1);
+      });
+    }
+
+    // Inline validation (delegated) for account names + NRICs
+    form.addEventListener('input', (e) => {
+      const input = e.target;
+      const kind = input.dataset && input.dataset.validate;
+      if (!kind) return;
+      const msg = input.parentElement.querySelector('.vmsg');
+      const v = input.value.trim();
+      let ok = null, text = '';
+      if (kind === 'account') {
+        if (!v) { ok = null; text = ''; }
+        else if (/[a-z]/.test(v)) { ok = false; text = 'Use UPPERCASE only — e.g. 15C4I_HQ_COY'; }
+        else if (!/^[A-Z0-9]+(?:_[A-Z0-9]+)+$/.test(v)) { ok = false; text = 'Needs the UNIT_COY shape — join parts with underscores.'; }
+        else { ok = true; text = 'Valid account name.'; }
+      } else if (kind === 'nric') {
+        if (!v) { ok = null; text = ''; }
+        else if (/[a-z]/.test(v)) { ok = false; text = 'Lowercase locks the user out — NRIC must be ALL CAPS.'; }
+        else if (!/^[STFGM][0-9]{7}[A-Z]$/.test(v)) { ok = false; text = 'Expected 1 letter + 7 digits + 1 letter, e.g. S1234567A.'; }
+        else { ok = true; text = 'Looks correct.'; }
       }
-      renderGrid(); renderLedger();
-      if (!silent) toast(b.drawn ? `${b.name} signed OUT` : `${b.name} signed IN`);
-    }
-
-    grid.addEventListener('click', (e) => {
-      const btn = e.target.closest('.bunch'); if (!btn) return;
-      toggleBunch(+btn.dataset.i, false);
-    });
-
-    tabs.forEach((t) => t.addEventListener('click', () => {
-      tabs.forEach((x) => x.classList.remove('active'));
-      t.classList.add('active');
-      cur = +t.dataset.kp; renderGrid();
-    }));
-
-    function startSim() {
-      if (simId) return;
-      simBtn.innerHTML = '<svg><use href="#i-refresh"/></svg>Stop simulation';
-      simBtn.classList.add('btn-in'); simBtn.classList.remove('btn-primary');
-      simId = setInterval(() => {
-        const bs = KP[cur].bunches;
-        const i = Math.floor(Math.random() * bs.length);
-        toggleBunch(i, true);
-      }, REDUCE ? 1400 : 850);
-    }
-    function haltSim() {
-      if (!simId) return;
-      clearInterval(simId); simId = null;
-      simBtn.innerHTML = '<svg><use href="#i-play"/></svg>Simulate duty day';
-      simBtn.classList.remove('btn-in'); simBtn.classList.add('btn-primary');
-    }
-    stopSim = haltSim;                            // exposed to router
-
-    simBtn?.addEventListener('click', () => (simId ? haltSim() : startSim()));
-    resetBtn?.addEventListener('click', () => {
-      haltSim();
-      KP.forEach((k) => k.bunches.forEach((b) => (b.drawn = false)));
-      ledger = [];
-      renderGrid(); renderLedger();
-      toast('Board reset');
-    });
-    exportBtn?.addEventListener('click', () => {
-      if (!ledger.length) { toast('Nothing to export yet', 'warn'); return; }
-      const rows = [['Keypress', 'Bunch', 'Keys', 'TimeOut', 'TimeIn']];
-      ledger.forEach((e) => rows.push([e.kp, e.name, e.keys, e.out.toISOString(), e.in ? e.in.toISOString() : '']));
-      const csv = rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
-      download(csv, 'keyx_audit_ledger.csv', 'text/csv');
-      toast('Audit ledger exported');
-    });
-
-    renderGrid(); renderLedger();
-  })();
-
-  /* ============================================= Onboarding wizard ===== */
-  (function onboarding() {
-    const checks = $$('.check');
-    if (!checks.length) return;
-    const REQUIRED = ['s1-accounts', 's1-admins', 's2-register', 's2-roll'];
-    const ringEl = $('#readyRing'), pctEl = $('#readyPct'), titleEl = $('#readyTitle'), subEl = $('#readySub');
-    const stp1 = $('#stp1'), stp2 = $('#stp2'), stp3 = $('#stp3');
-    const RC = 2 * Math.PI * 26;
-    if (ringEl) { ringEl.style.strokeDasharray = RC; ringEl.style.strokeDashoffset = RC; }
-    let state = store.get('keyx-onboard', {});
-    let celebrated = false;
-
-    function apply() {
-      checks.forEach((c) => {
-        const on = !!state[c.dataset.check];
-        c.classList.toggle('on', on);
-        c.setAttribute('aria-pressed', String(on));
-      });
-      const doneReq = REQUIRED.filter((k) => state[k]).length;
-      const frac = doneReq / REQUIRED.length;
-      if (ringEl) ringEl.style.strokeDashoffset = RC * (1 - frac);
-      if (pctEl) pctEl.textContent = Math.round(frac * 100) + '%';
-      const s1 = state['s1-accounts'] && state['s1-admins'];
-      const s2 = state['s2-register'] && state['s2-roll'];
-      stp1?.classList.toggle('done', !!s1);
-      stp2?.classList.toggle('done', !!s2);
-      stp3?.classList.toggle('done', !!(s1 && s2));
-      if (subEl) subEl.textContent = `${doneReq} of ${REQUIRED.length} required items prepared`;
-      if (titleEl) titleEl.textContent = (s1 && s2) ? 'Your unit is ready to go live 🎉' : (doneReq ? 'Nicely on your way' : "Let's get your unit ready");
-      if (s1 && s2 && !celebrated) { celebrated = true; toast('All set — message Ranee to go live!'); }
-      if (!(s1 && s2)) celebrated = false;
-    }
-
-    function toggle(c) {
-      const k = c.dataset.check;
-      state[k] = !state[k];
-      if (!state[k]) delete state[k];
-      store.set('keyx-onboard', state);
-      apply();
-    }
-    checks.forEach((c) => {
-      c.addEventListener('click', (e) => {
-        if (e.target.closest('[data-copy],[data-download],a,button')) return; // don't toggle when using an inner control
-        toggle(c);
-      });
-      c.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(c); }
-      });
-    });
-
-    $('#clearProgress')?.addEventListener('click', () => {
-      state = {}; store.del('keyx-onboard'); celebrated = false; apply(); toast('Checklist reset');
-    });
-
-    apply();
-  })();
-
-  /* ================================================= Format validators == */
-  (function validators() {
-    const acct = $('#acctIn'), acctMsg = $('#acctMsg');
-    const nric = $('#nricIn'), nricMsg = $('#nricMsg');
-
-    function setMsg(input, msgEl, ok, text) {
       input.classList.toggle('ok', ok === true);
       input.classList.toggle('bad', ok === false);
-      msgEl.className = 'vmsg ' + (ok === true ? 'ok' : ok === false ? 'bad' : 'idle');
-      msgEl.textContent = text;
+      if (msg) { msg.className = 'vmsg ' + (ok === true ? 'ok' : ok === false ? 'bad' : 'idle'); msg.textContent = text; }
+    });
+
+    document.getElementById('addSubunit').addEventListener('click', () => {
+      const card = subunit();
+      list.appendChild(card); renumber();
+      card.querySelector('.su-name').focus();
+    });
+
+    function collect() {
+      const unit = (unitInput.value || '').trim();
+      const subs = [];
+      $$('.subunit', list).forEach((c) => {
+        const name = c.querySelector('.su-name').value.trim();
+        const account = c.querySelector('.su-account').value.trim();
+        const admins = $$('.admin-row', c).map((r) => ({
+          name: r.querySelector('.ad-name').value.trim(),
+          nric: r.querySelector('.ad-nric').value.trim(),
+        })).filter((a) => a.name || a.nric);
+        if (name || account || admins.length) subs.push({ name, account, admins });
+      });
+      return { unit, subs };
     }
 
-    acct?.addEventListener('input', () => {
-      const v = acct.value.trim();
-      if (!v) return setMsg(acct, acctMsg, null, 'Uppercase letters, digits and underscores — at least one underscore.');
-      if (/[a-z]/.test(v)) return setMsg(acct, acctMsg, false, 'Use UPPERCASE only — e.g. 15C4I_HQ_COY');
-      if (!/^[A-Z0-9]+(?:_[A-Z0-9]+)+$/.test(v)) return setMsg(acct, acctMsg, false, 'Needs the UNIT_COY shape — join parts with underscores.');
-      setMsg(acct, acctMsg, true, 'Valid account name.');
-    });
+    function sendToRanee() {
+      const { unit, subs } = collect();
+      if (!unit) { toast('Add your unit name first', 'warn'); unitInput.focus(); return; }
+      if (!subs.some((s) => s.name && s.account)) {
+        toast('Add a branch / coy with its account name', 'warn'); return;
+      }
+      let msg = '*KeyX Onboarding — Step 1: Access request*\n\n';
+      msg += 'Unit: ' + unit + '\n\nAccounts to create:\n';
+      subs.forEach((s, i) => {
+        msg += (i + 1) + ') ' + (s.name || '(unnamed)') + ' — Account: ' + (s.account || '(tbc)') + '\n';
+        if (s.admins.length) {
+          msg += '   Admins:\n';
+          s.admins.forEach((a) => { msg += '   • ' + (a.name || '(name?)') + ' (' + (a.nric || 'NRIC?') + ')\n'; });
+        }
+        msg += '\n';
+      });
+      window.open(WA + '?text=' + encodeURIComponent(msg.trim()), '_blank', 'noopener');
+      toast('Opening WhatsApp — review, then send');
+    }
 
-    nric?.addEventListener('input', () => {
-      const v = nric.value.trim();
-      if (!v) return setMsg(nric, nricMsg, null, 'KeyX matches this exact text to the SingPass login — lowercase locks the user out.');
-      if (/[a-z]/.test(v)) return setMsg(nric, nricMsg, false, 'Lowercase detected — NRIC MUST be ALL CAPS or the user is locked out.');
-      if (!/^[STFGM][0-9]{7}[A-Z]$/.test(v)) return setMsg(nric, nricMsg, false, 'Expected 1 letter + 7 digits + 1 letter, e.g. S1234567A.');
-      setMsg(nric, nricMsg, true, 'Format looks correct and is ALL CAPS.');
-    });
+    document.getElementById('sendStep1').addEventListener('click', sendToRanee);
+
+    // Seed the form with one sub-unit
+    list.appendChild(subunit()); renumber();
   })();
 
   /* ======================================================== Accordion === */
