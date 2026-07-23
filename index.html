@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="dark light" />
+  <title>KeyX — Digital Keypress for units without EKMS</title>
+  <meta name="description" content="KeyX replaces the physical keypress book with a SingPass-verified digital ledger. Learn the system, see the benefits, and onboard your unit — from any device." />
+  <meta name="theme-color" content="#0a121e" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#e9eef6" media="(prefers-color-scheme: light)" />
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+<!-- ============================ ICON SPRITE ============================ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="4"/><path d="M10.4 12.6 20 3"/><path d="M16 7l3 3"/><path d="M13 10l2.5 2.5"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-qr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M21 14v.01M14 21h3M21 18v3"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5.5a3 3 0 0 1 0 5.5M17 14c2.5.6 4 2.7 4 6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 2h4l1.5 5-2.2 1.4a12 12 0 0 0 5.8 5.8L17 12l5 1.5v4a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 4.2 2 2 0 0 1 6.5 2Z"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-5 5 5-5 5 5"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12m-5-5 5 5 5-5"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1 7 17M17 7l2.1-2.1"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5A2 2 0 0 1 6 3h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19.5A2 2 0 0 1 6 18h13"/></symbol>
+    <symbol id="i-rocket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 15c-1.5 1.5-2 5-2 5s3.5-.5 5-2"/><path d="M9 12a13 13 0 0 1 8-8c2 0 3 1 3 3a13 13 0 0 1-8 8Z"/><circle cx="14.5" cy="9.5" r="1.6"/><path d="M9 12l-3 .5 5.5 5.5.5-3"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20z"/><path d="M12 9v5M12 17.5v.01"/></symbol>
+    <symbol id="i-swap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13l-3-3m3 3-3 3"/><path d="M20 16H7l3-3m-3 3 3 3"/></symbol>
+    <symbol id="i-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M7 21h10M4 7h16l-3 6H7z" /><path d="M4 7 1.5 13h5zM20 7l-2.5 6h5z"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4 7 7 0 1 0 20 14.5Z"/></symbol>
+    <symbol id="i-id" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="11" r="2"/><path d="M5.5 16c.5-1.6 1.7-2.5 3-2.5s2.5.9 3 2.5M14 9h4M14 12.5h4M14 16h2.5"/></symbol>
+    <symbol id="i-export" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m-4 4 4-4 4 4"/><path d="M20 15v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4.5 19 12 7 19.5z"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-.5 4"/><path d="M20 4v5h-5"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h8l4 4v16H6z"/><path d="M14 2v4h4M9 13h6M9 17h6M9 9h2"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5M3 17l9 5 9-5" opacity=".55"/></symbol>
+  </defs>
+</svg>
+
+<!-- ================================ TOP BAR ================================ -->
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#/" aria-label="KeyX home">
+      <svg class="emblem" viewBox="0 0 64 64" aria-hidden="true">
+        <circle cx="32" cy="32" r="21" fill="none" stroke="var(--line-strong)" stroke-width="2.4" stroke-dasharray="70 12 20 12" stroke-linecap="round"/>
+        <line x1="20.5" y1="20.5" x2="43.5" y2="43.5" stroke="var(--signal)" stroke-width="6" stroke-linecap="round"/>
+        <g stroke="var(--ink)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="21.5" cy="42.5" r="5.4" stroke-width="3.4"/>
+          <line x1="25" y1="39" x2="43" y2="21" stroke-width="4.4"/>
+          <line x1="39.5" y1="24.5" x2="43.5" y2="28.5" stroke-width="3.6"/>
+          <line x1="35.5" y1="28.5" x2="38.5" y2="31.5" stroke-width="3.6"/>
+        </g>
+      </svg>
+      <span class="word">Key<b>X</b><small>Digital Keypress</small></span>
+    </a>
+
+    <nav class="nav-desktop" aria-label="Primary">
+      <a class="nav-link" href="#/" data-route="/"><svg><use href="#i-grid"/></svg>Overview</a>
+      <a class="nav-link" href="#/how" data-route="/how"><svg><use href="#i-shield"/></svg>How it works</a>
+      <a class="nav-link" href="#/demo" data-route="/demo"><svg><use href="#i-eye"/></svg>Live demo</a>
+      <a class="nav-link" href="#/benefits" data-route="/benefits"><svg><use href="#i-bolt"/></svg>Benefits</a>
+      <a class="nav-link" href="#/onboard" data-route="/onboard"><svg><use href="#i-rocket"/></svg>Onboard</a>
+    </nav>
+
+    <div class="nav-tools">
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle light / dark theme" title="Toggle theme">
+        <svg class="moon"><use href="#i-moon"/></svg>
+        <svg class="sun"><use href="#i-sun"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="app-main" id="top">
+
+  <!-- ============================= OVERVIEW ============================= -->
+  <section class="view" data-view="/" aria-label="Overview">
+    <div class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <span class="eyebrow">The digital keypress · for units without EKMS</span>
+          <h1 data-reveal>Modernize your command over <span class="hl">every key.</span></h1>
+          <p class="sub" data-reveal data-reveal-d="1">KeyX replaces the physical keypress book with a SingPass-verified digital ledger. Every issue, return, and handover is logged automatically — so your keys are exactly where they belong, precisely when they matter.</p>
+          <div class="cta-row" data-reveal data-reveal-d="2">
+            <a class="btn btn-primary btn-lg" href="#/onboard"><svg><use href="#i-rocket"/></svg>Onboard your unit</a>
+            <a class="btn btn-lg" href="#/demo"><svg><use href="#i-play"/></svg>Try the live demo</a>
+          </div>
+          <div class="meta-row" data-reveal data-reveal-d="3">
+            <div class="m"><div class="n mono">55s</div><div class="l">Secure QR window</div></div>
+            <div class="m"><div class="n">SingPass</div><div class="l">Verified identity</div></div>
+            <div class="m"><div class="n mono">7-day</div><div class="l">Rolling ledger</div></div>
+          </div>
+        </div>
+
+        <!-- Live keypress console mock -->
+        <div class="console" data-reveal data-reveal-d="1" aria-hidden="true">
+          <div class="bar">
+            <span class="dots"><i></i><i></i><i></i></span>
+            <span class="title">Quickglance · Demo Office 1</span>
+            <span class="live"><span class="blip"></span>LIVE</span>
+          </div>
+          <div class="body">
+            <div class="cx-head"><h4>Keypress&nbsp;1</h4><span class="pill in" id="heroAvail"><span class="dot"></span>— available</span></div>
+            <div class="pegs" id="heroPegs"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">The essentials</span>
+          <h2 class="section-title" data-reveal>What KeyX actually is</h2>
+          <p class="lead" data-reveal data-reveal-d="1">A web-based log for physical keys — run from the phone in your pocket. No app store, no new hardware, no closing the book at night.</p>
+        </div>
+        <div class="grid g-4">
+          <article class="card card-hover feature" data-reveal>
+            <div class="ico"><svg><use href="#i-phone"/></svg></div>
+            <h3>Web-based mobile log</h3>
+            <p>Replaces the physical keypress book. Duty personnel log key movements straight from their own mobile device.</p>
+          </article>
+          <article class="card card-hover feature in" data-reveal data-reveal-d="1">
+            <div class="ico"><svg><use href="#i-book"/></svg></div>
+            <h3>No physical sign-in</h3>
+            <p>Units no longer sign in and out of the paper book — and there's no nightly requirement to close it.</p>
+          </article>
+          <article class="card card-hover feature" data-reveal data-reveal-d="2">
+            <div class="ico"><svg><use href="#i-users"/></svg></div>
+            <h3>Duty personnel issue keys</h3>
+            <p>The duty personnel (e.g. COS) holding the physical keypress key is the one issuing keys, and ensures all are returned by day's end.</p>
+          </article>
+          <article class="card card-hover feature" data-reveal data-reveal-d="3">
+            <div class="ico"><svg><use href="#i-eye"/></svg></div>
+            <h3>Role-based visibility</h3>
+            <p>Whitelisted duty personnel see key statuses at a glance. Admins edit and whitelist — but cannot sign keys in or out.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Core functionalities</span>
+          <h2 class="section-title" data-reveal>Three moves, one chain of custody</h2>
+        </div>
+        <div class="grid g-3">
+          <article class="card card-hover feature" data-reveal>
+            <div class="ico"><svg><use href="#i-qr"/></svg></div>
+            <h3>Secure QR handover</h3>
+            <p>Keys are issued or returned by scanning a dynamic QR code — a secure, time-sensitive digital handshake between two devices.</p>
+          </article>
+          <article class="card card-hover feature" data-reveal data-reveal-d="1">
+            <div class="ico"><svg><use href="#i-swap"/></svg></div>
+            <h3>HOTO key transfers</h3>
+            <p>Handover / Takeover lets custody pass directly between personnel — without returning the key to the central keypress first.</p>
+          </article>
+          <article class="card card-hover feature" data-reveal data-reveal-d="2">
+            <div class="ico"><svg><use href="#i-grid"/></svg></div>
+            <h3>Automated overview</h3>
+            <p>A real-time dashboard shows Issuers and Admins which keys are <span class="text-in">in (green)</span> or <span class="text-out">out (red)</span> — at a glance.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="wrap">
+        <div class="statband" data-reveal>
+          <div class="s"><div class="n">0</div><div class="l">Paper logbooks to close</div></div>
+          <div class="s"><div class="n">100<small>%</small></div><div class="l">SingPass-verified actions</div></div>
+          <div class="s"><div class="n mono">55<small>s</small></div><div class="l">Custody handshake window</div></div>
+          <div class="s"><div class="n">∞</div><div class="l">Full historical audit access</div></div>
+        </div>
+        <div class="card mt-3" data-reveal style="display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;">
+          <div>
+            <h3 style="font-size:1.25rem;">Ready to bring your unit onto KeyX?</h3>
+            <p class="text-muted" style="font-size:0.92rem;margin-top:.3rem;">A guided, two-step checklist walks you through every account, roll and template.</p>
+          </div>
+          <a class="btn btn-primary btn-lg" href="#/onboard"><svg><use href="#i-rocket"/></svg>Start onboarding</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ HOW IT WORKS ============================ -->
+  <section class="view" data-view="/how" aria-label="How it works">
+    <div class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">The secure transfer protocol</span>
+          <h2 class="section-title" data-reveal>Custody only moves through a digital handshake</h2>
+          <p class="lead" data-reveal data-reveal-d="1">Whether issuing, returning, or executing a direct Handover / Takeover between personnel, physical custody is only transferred once both devices complete a synchronized, cryptographic handshake. Run it below.</p>
+        </div>
+
+        <div class="card" data-reveal>
+          <div class="transfer">
+            <div class="device has-key" id="devA">
+              <div class="dv-top"><span class="dv-role">Device A · Custodian</span><span class="pill signal" id="devAstate"><span class="dot"></span>Holding</span></div>
+              <div class="dv-name">CPL Tan (COS)</div>
+              <div class="dv-key"><svg class="keyglyph"><use href="#i-key"/></svg><span id="devAkey">Games Room · Bunch 1</span></div>
+            </div>
+
+            <div class="mid">
+              <div class="qr-ring" id="qrRing" style="--circ:383">
+                <svg class="ring" viewBox="0 0 132 132"><circle class="track" cx="66" cy="66" r="61"/><circle class="prog" id="qrProg" cx="66" cy="66" r="61"/></svg>
+                <div class="qr-code"><canvas class="qr-canvas" id="qrCanvas" width="21" height="21"></canvas></div>
+              </div>
+              <div class="qr-count mono" id="qrCount">Idle</div>
+              <svg class="flow-arrow" width="26" height="26"><use href="#i-arrow"/></svg>
+            </div>
+
+            <div class="device" id="devB">
+              <div class="dv-top"><span class="dv-role">Device B · Receiver</span><span class="pill" id="devBstate"><span class="dot"></span>Waiting</span></div>
+              <div class="dv-name">CPL Lim (Incoming)</div>
+              <div class="dv-key"><svg class="keyglyph"><use href="#i-key"/></svg><span id="devBkey">No key held</span></div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center mt-2" style="justify-content:center;gap:.7rem;">
+            <button class="btn btn-primary" id="htInitiate" type="button"><svg><use href="#i-qr"/></svg>Generate handover code</button>
+            <button class="btn btn-in" id="htScan" type="button" disabled><svg><use href="#i-check"/></svg>Scan on Device B</button>
+            <button class="btn btn-ghost" id="htReset" type="button"><svg><use href="#i-refresh"/></svg>Reset</button>
+          </div>
+
+          <div class="transfer-steps">
+            <div class="st"><span class="k">01 · Initiation</span><h5>Generate</h5><p>The current custodian generates a unique, single-use QR code for the key.</p></div>
+            <div class="st"><span class="k">02 · Secure window</span><h5>Scan in 55s</h5><p>The receiver must scan the code within a strict 54–55 second cryptographic window.</p></div>
+            <div class="st"><span class="k">03 · Acceptance</span><h5>Ledger updates</h5><p>The digital ledger instantly updates the chain of custody to the new holder.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">System architecture &amp; roles</span>
+          <h2 class="section-title" data-reveal>Who does what</h2>
+          <p class="lead" data-reveal data-reveal-d="1">KeyX separates <em>administration</em> from <em>issuance</em>. The people who build the inventory are not the people who move keys — and the system enforces that line.</p>
+        </div>
+        <div class="rolelist">
+          <div class="role" data-reveal>
+            <div class="ico"><svg><use href="#i-gear"/></svg></div>
+            <div><span class="tag">Unit Administrators · UA</span><h4>Build &amp; govern the inventory</h4><p>The primary managers responsible for creating keypresses, entering key-bunch details, and managing user whitelists. Admins edit and whitelist, but <strong>cannot</strong> sign keys in or out.</p></div>
+          </div>
+          <div class="role" data-reveal data-reveal-d="1">
+            <div class="ico"><svg><use href="#i-users"/></svg></div>
+            <div><span class="tag">Issuers &amp; Key Holders</span><h4>Move keys on the ground</h4><p>Issuers — duty personnel like the OCS / DO — supervise key movement, while Key Holders draw keys for official use. Issuers can only see the keypresses they are whitelisted to manage.</p></div>
+          </div>
+          <div class="role" data-reveal data-reveal-d="2">
+            <div class="ico"><svg><use href="#i-id"/></svg></div>
+            <div><span class="tag">SingPass integrated security</span><h4>Every action is identity-bound</h4><p>All users access KeyX through secure SingPass authentication, giving high-fidelity identity verification behind every single transaction in the ledger.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== LIVE DEMO ============================== -->
+  <section class="view" data-view="/demo" aria-label="Live demo">
+    <div class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Quickglance dashboard · interactive</span>
+          <h2 class="section-title" data-reveal>See the whole keypress at a glance</h2>
+          <p class="lead" data-reveal data-reveal-d="1">This is a working model of the KeyX Quickglance board. Tap any bunch to draw or return its key — the status LED flips, the counts update, and the event is written to the audit ledger in real time. Or press <strong>Simulate duty day</strong> and watch it run.</p>
+        </div>
+
+        <div class="demo-shell">
+          <div class="card board" data-reveal>
+            <div class="tabs" id="kpTabs" role="tablist" aria-label="Keypresses">
+              <button class="tab active" role="tab" data-kp="0">Keypress 1</button>
+              <button class="tab" role="tab" data-kp="1">Keypress 2</button>
+            </div>
+            <div class="summary">
+              <div class="kpi in"><div class="n mono" id="kpiIn">0</div><div class="l">Available · IN</div></div>
+              <div class="kpi out"><div class="n mono" id="kpiOut">0</div><div class="l">Drawn · OUT</div></div>
+              <div class="kpi"><div class="n mono" id="kpiTotal">0</div><div class="l">Total bunches</div></div>
+            </div>
+            <div class="bunch-grid" id="bunchGrid"></div>
+          </div>
+
+          <div class="demo-side">
+            <div class="card" data-reveal data-reveal-d="1">
+              <div class="demo-controls">
+                <button class="btn btn-primary" id="simBtn" type="button"><svg><use href="#i-play"/></svg>Simulate duty day</button>
+                <button class="btn btn-ghost" id="resetBtn" type="button"><svg><use href="#i-refresh"/></svg>Reset</button>
+              </div>
+              <p class="hint mt-2">Tip: tapping a bunch is exactly how an Issuer signs a key <span class="text-in">in</span> or <span class="text-out">out</span> on their phone.</p>
+            </div>
+
+            <div class="card ledger" data-reveal data-reveal-d="2">
+              <div class="lg-head">
+                <h4>Audit ledger</h4>
+                <button class="copy-btn" id="exportBtn" type="button"><svg><use href="#i-export"/></svg>Export CSV</button>
+              </div>
+              <div class="rows">
+                <table>
+                  <thead><tr><th>Bunch</th><th>Keys</th><th>Time out</th><th>Time in</th></tr></thead>
+                  <tbody id="ledgerBody"></tbody>
+                </table>
+                <div class="empty" id="ledgerEmpty">No movements yet — tap a bunch to begin.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout mt-3" style="border-color:color-mix(in srgb,var(--signal) 40%,transparent);background:var(--signal-dim);" data-reveal>
+          <div class="ico" style="background:color-mix(in srgb,var(--signal) 20%,transparent);color:var(--signal-2);"><svg><use href="#i-eye"/></svg></div>
+          <div><h4>Targeted vision, by design</h4><p>Issuers are algorithmically restricted to view only the specific keypresses they are whitelisted to manage — compartmentalizing operational intelligence so no one sees more than their duty requires.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== BENEFITS ============================== -->
+  <section class="view" data-view="/benefits" aria-label="Benefits">
+    <div class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Why units switch</span>
+          <h2 class="section-title" data-reveal>From physical liability to digital trust</h2>
+          <p class="lead" data-reveal data-reveal-d="1">Five pillars replace the vulnerabilities of a paper logbook with a verifiable, exportable chain of custody.</p>
+        </div>
+
+        <div class="stack">
+          <article class="card pillar" data-reveal>
+            <div><div class="num mono">01</div><div class="ico" style="margin-top:.6rem;"><svg><use href="#i-shield"/></svg></div></div>
+            <div>
+              <h3>Absolute accountability</h3>
+              <p>Digital logs eliminate manual-entry errors and provide a transparent history of every individual who ever held a specific key.</p>
+              <ul>
+                <li><svg><use href="#i-check"/></svg>Every issue, return and HOTO is identity-bound via SingPass.</li>
+                <li><svg><use href="#i-check"/></svg>No more illegible handwriting or missing signatures.</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="card pillar" data-reveal>
+            <div><div class="num mono">02</div><div class="ico" style="margin-top:.6rem;background:var(--in-dim);color:var(--in);border-color:color-mix(in srgb,var(--in) 28%,transparent);"><svg><use href="#i-eye"/></svg></div></div>
+            <div>
+              <h3>Real-time operational visibility</h3>
+              <p>Eliminate physical logbooks and blind spots. The Quickglance dashboard gives an instant, exact overview of keypress statuses.</p>
+              <ul>
+                <li><svg><use href="#i-check"/></svg><strong>Available</strong> — key is secure in the keypress <span class="text-in">(green)</span>.</li>
+                <li><svg><use href="#i-check"/></svg><strong>Drawn</strong> — key is actively drawn and tracked <span class="text-out">(red)</span>.</li>
+                <li><svg><use href="#i-check"/></svg>Targeted vision keeps each Issuer scoped to their own keypresses.</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="card pillar" data-reveal>
+            <div><div class="num mono">03</div><div class="ico" style="margin-top:.6rem;"><svg><use href="#i-layers"/></svg></div></div>
+            <div>
+              <h3>Frictionless scalability</h3>
+              <p>Designed for rapid deployment at the unit level, KeyX eliminates manual data-entry bottlenecks.</p>
+              <ul>
+                <li><svg><use href="#i-check"/></svg><strong>Mass key ingestion</strong> — whole offices and bunches upload instantly via standardized templates.</li>
+                <li><svg><use href="#i-check"/></svg><strong>Mass whitelisting</strong> — entire rosters are onboarded, verified, and given automated expiry dates in seconds.</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="card pillar" data-reveal>
+            <div><div class="num mono">04</div><div class="ico" style="margin-top:.6rem;background:var(--warn-dim);color:var(--warn);border-color:color-mix(in srgb,var(--warn) 28%,transparent);"><svg><use href="#i-clock"/></svg></div></div>
+            <div>
+              <h3>Dynamic access control</h3>
+              <p>Whitelists can be configured with specific expiry dates, automatically revoking access for temporary personnel or duty rotations.</p>
+              <ul>
+                <li><svg><use href="#i-check"/></svg>Access lapses on ORD or posting-out — no manual clean-up.</li>
+                <li><svg><use href="#i-check"/></svg>Receiver whitelists gate the most sensitive keys.</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="card pillar" data-reveal>
+            <div><div class="num mono">05</div><div class="ico" style="margin-top:.6rem;"><svg><use href="#i-doc"/></svg></div></div>
+            <div>
+              <h3>Unbreakable audit trails</h3>
+              <p>Every issuance, return and HOTO event is permanently etched into the digital ledger, creating a flawless chain of custody.</p>
+              <ul>
+                <li><svg><use href="#i-check"/></svg><strong>Continuous tracking</strong> — a rolling 7-day operational view with full historical access.</li>
+                <li><svg><use href="#i-check"/></svg><strong>Exportable integrity</strong> — filter by date range and export instantly for audits and investigations.</li>
+                <li><svg><use href="#i-check"/></svg><strong>Reduced burden</strong> — automated logging cuts the time spent on manual record-keeping.</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+
+        <div class="card mt-3" data-reveal style="display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;">
+          <div><h3 style="font-size:1.2rem;">Modernize your command.</h3><p class="text-muted" style="font-size:.92rem;margin-top:.3rem;max-width:46ch;">Ensure your assets are exactly where they belong, precisely when they matter.</p></div>
+          <a class="btn btn-primary btn-lg" href="#/onboard"><svg><use href="#i-rocket"/></svg>Onboard your unit</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= ONBOARDING ============================= -->
+  <section class="view" data-view="/onboard" aria-label="Onboarding">
+    <div class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Onboard your unit</span>
+          <h2 class="section-title" data-reveal>Two steps to a live keypress</h2>
+          <p class="lead" data-reveal data-reveal-d="1">Gather a few lists, hand them over, and you're ready to use. Tick items off as you prepare them — your progress is saved on this device.</p>
+        </div>
+
+        <div class="card readiness mt-2" data-reveal>
+          <div class="ring" aria-hidden="true">
+            <svg viewBox="0 0 62 62"><circle class="tr" cx="31" cy="31" r="26"/><circle class="pr" id="readyRing" cx="31" cy="31" r="26" style="--c:163"/></svg>
+            <span class="pct mono" id="readyPct">0%</span>
+          </div>
+          <div class="txt">
+            <h4 id="readyTitle">Let's get your unit ready</h4>
+            <p id="readySub">0 of 0 items prepared</p>
+          </div>
+          <button class="btn btn-ghost" id="clearProgress" type="button" style="margin-left:auto;"><svg><use href="#i-refresh"/></svg>Reset checklist</button>
+        </div>
+
+        <div class="stepper mt-2" data-reveal>
+          <div class="step" id="stp1"><span class="b">1</span><span class="t">Access to KeyX<small>Accounts &amp; admins</small></span></div>
+          <div class="step" id="stp2"><span class="b">2</span><span class="t">Set up your account<small>Register &amp; whitelist</small></span></div>
+          <div class="step" id="stp3"><span class="b"><svg style="width:16px;height:16px" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m4 10 4 4 8-9"/></svg></span><span class="t">Ready to use<small>Go live</small></span></div>
+        </div>
+
+        <!-- STEP 1 -->
+        <div class="stack mt-3">
+          <div class="card" data-reveal>
+            <div class="flex items-center between" style="flex-wrap:wrap;gap:.6rem;">
+              <h3 style="font-size:1.25rem;"><span class="mono text-muted" style="font-size:.8em;">STEP 1 ·</span> Get access to KeyX</h3>
+              <span class="pill">For your S1 / admin</span>
+            </div>
+            <p class="text-muted mt-1" style="font-size:.93rem;">Send these two lists to provision your unit's admin accounts.</p>
+
+            <div class="checklist mt-2">
+              <div class="check" role="button" tabindex="0" aria-pressed="false" data-check="s1-accounts" data-step="1">
+                <span class="box"><svg><use href="#i-check"/></svg></span>
+                <span class="c-body">
+                  <h5>Name the accounts you need</h5>
+                  <p>One account per company / branch, in <code>UNIT_COY</code> format.</p>
+                  <div class="fmt"><span><span class="k">e.g.&nbsp;</span>15C4I_HQ_COY&nbsp;·&nbsp;15C4I_C4_COY_1&nbsp;·&nbsp;15C4I_ISR</span><button class="copy-btn" type="button" data-copy="15C4I_HQ_COY, 15C4I_C4_COY_1, 15C4I_ISR"><svg><use href="#i-copy"/></svg>Copy</button></div>
+                </span>
+                <span class="c-tag"><span class="pill signal">Required</span></span>
+              </div>
+
+              <div class="check" role="button" tabindex="0" aria-pressed="false" data-check="s1-admins" data-step="1">
+                <span class="box"><svg><use href="#i-check"/></svg></span>
+                <span class="c-body">
+                  <h5>Nominal roll of admin users</h5>
+                  <p>For each account, list admins as <strong>Full Name &amp; Full NRIC</strong>. Recommended admins, for audit purposes: <strong>OC, CSM, S2, INT WO</strong>.</p>
+                  <div class="fmt"><span><span class="k">format&nbsp;</span>Full Name&nbsp;&amp;&nbsp;Full NRIC</span><button class="copy-btn" type="button" data-copy="Full Name & Full NRIC"><svg><use href="#i-copy"/></svg>Copy</button></div>
+                </span>
+                <span class="c-tag"><span class="pill signal">Required</span></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2 -->
+          <div class="card" data-reveal>
+            <div class="flex items-center between" style="flex-wrap:wrap;gap:.6rem;">
+              <h3 style="font-size:1.25rem;"><span class="mono text-muted" style="font-size:.8em;">STEP 2 ·</span> Set up your account</h3>
+              <span class="pill admin">Sent to KeyX</span>
+            </div>
+            <p class="text-muted mt-1" style="font-size:.93rem;">Hand over your current register and rolls, and KeyX builds your keypress.</p>
+
+            <div class="checklist mt-2">
+              <div class="check" role="button" tabindex="0" aria-pressed="false" data-check="s2-register" data-step="2">
+                <span class="box"><svg><use href="#i-check"/></svg></span>
+                <span class="c-body">
+                  <h5>Current key-press register</h5>
+                  <p>List each keypress as <strong>Keypress Name &amp; Bunch Number</strong>.</p>
+                  <div class="fmt"><span><span class="k">e.g.&nbsp;</span>Keypress 1 (13 bunches)</span><button class="copy-btn" type="button" data-copy="Keypress 1 (13 bunches)"><svg><use href="#i-copy"/></svg>Copy</button></div>
+                </span>
+                <span class="c-tag"><span class="pill signal">Required</span></span>
+              </div>
+
+              <div class="check" role="button" tabindex="0" aria-pressed="false" data-check="s2-roll" data-step="2">
+                <span class="box"><svg><use href="#i-check"/></svg></span>
+                <span class="c-body">
+                  <h5>Nominal roll of users</h5>
+                  <p>List as <strong>Full Name &amp; Full NRIC &amp; ORD Date</strong>. Recommended: add all personnel in the company / branch.</p>
+                  <div class="fmt"><span><span class="k">format&nbsp;</span>Full Name&nbsp;&amp;&nbsp;Full NRIC&nbsp;&amp;&nbsp;ORD Date</span><button class="copy-btn" type="button" data-copy="Full Name & Full NRIC & ORD Date"><svg><use href="#i-copy"/></svg>Copy</button></div>
+                </span>
+                <span class="c-tag"><span class="pill signal">Required</span></span>
+              </div>
+
+              <div class="check" role="button" tabindex="0" aria-pressed="false" data-check="s2-whitelist" data-step="2">
+                <span class="box"><svg><use href="#i-check"/></svg></span>
+                <span class="c-body">
+                  <h5>Flag sensitive keys for Receiver Whitelist</h5>
+                  <p>Only activate the Receiver Whitelist for sensitive keys that already have an authorisation letter in your current keypress — e.g. <strong>Server Room keys</strong>.</p>
+                </span>
+                <span class="c-tag"><span class="pill">Optional</span></span>
+              </div>
+            </div>
+
+            <div class="card mt-2" style="background:var(--surface-2);border-style:dashed;">
+              <div class="contact-card">
+                <div class="av"><svg><use href="#i-phone"/></svg></div>
+                <div class="who"><div class="n">Send Step 2 to Ranee</div><div class="r">WhatsApp · +65 8782 0742 · KeyX onboarding</div></div>
+                <a class="btn btn-in" href="https://wa.me/6587820742" target="_blank" rel="noopener"><svg><use href="#i-phone"/></svg>Message on WhatsApp</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORMAT VALIDATOR -->
+    <div class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Get the formatting right the first time</span>
+          <h2 class="section-title" data-reveal>Format checker</h2>
+          <p class="lead" data-reveal data-reveal-d="1">Two rules cause almost every onboarding hiccup. Test your entries here before you send them.</p>
+        </div>
+        <div class="grid g-2">
+          <div class="card validator" data-reveal>
+            <div class="vfield">
+              <label for="acctIn">Account name · <span class="text-muted mono" style="font-weight:400;">UNIT_COY</span></label>
+              <div class="row"><input id="acctIn" type="text" spellcheck="false" autocomplete="off" placeholder="15C4I_HQ_COY" aria-describedby="acctMsg"/></div>
+              <div class="vmsg idle" id="acctMsg">Uppercase letters, digits and underscores — at least one underscore.</div>
+            </div>
+          </div>
+          <div class="card validator" data-reveal data-reveal-d="1">
+            <div class="vfield">
+              <label for="nricIn">NRIC · <span class="text-warn mono" style="font-weight:400;">MUST be ALL CAPS</span></label>
+              <div class="row"><input id="nricIn" type="text" spellcheck="false" autocomplete="off" placeholder="S1234567A" aria-describedby="nricMsg"/></div>
+              <div class="vmsg idle" id="nricMsg">KeyX matches this exact text to the SingPass login — lowercase locks the user out.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN GUIDE -->
+    <div class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Admin playbook</span>
+          <h2 class="section-title" data-reveal>Running KeyX day to day</h2>
+          <p class="lead" data-reveal data-reveal-d="1">Once you're live, here's how Unit Administrators build and maintain the keypress. Grab the mass-upload templates as you go.</p>
+        </div>
+
+        <div class="acc" id="adminAcc" data-reveal>
+          <div class="acc-item">
+            <button class="acc-head" type="button" aria-expanded="false">
+              <span class="ico"><svg><use href="#i-gear"/></svg></span>
+              <span class="h"><span class="t">Managing keypresses</span><span class="s">Quick Access → Manage Keypress → View Logs</span></span>
+              <svg class="chev" width="20" height="20"><use href="#i-chevron"/></svg>
+            </button>
+            <div class="acc-body"><div><div class="acc-inner">
+              <ol>
+                <li>From <strong>Quick Access</strong>, open <strong>Manage Keypress</strong> (or <strong>View Logs</strong> to review movements).</li>
+                <li>Add a key with <strong>Keypress Name</strong>, <strong>Bunch No.</strong>, <strong>Keys</strong> and <strong>Name</strong>, then <strong>Create</strong>.</li>
+                <li>Entering a <strong>new</strong> Keypress Name automatically creates a new keypress.</li>
+              </ol>
+              <div class="callout">
+                <div class="ico"><svg><use href="#i-alert"/></svg></div>
+                <div><h4>Keypress names are case-sensitive</h4><p><code>Office 1</code> and <code>office 1</code> create two entirely different logs. Decide on one spelling and keep to it.</p></div>
+              </div>
+            </div></div></div>
+          </div>
+
+          <div class="acc-item">
+            <button class="acc-head" type="button" aria-expanded="false">
+              <span class="ico"><svg><use href="#i-key"/></svg></span>
+              <span class="h"><span class="t">Building inventory · adding keys</span><span class="s">Single add, or mass add from a spreadsheet</span></span>
+              <svg class="chev" width="20" height="20"><use href="#i-chevron"/></svg>
+            </button>
+            <div class="acc-body"><div><div class="acc-inner">
+              <ol>
+                <li><strong>Single add:</strong> click <strong>Add Key</strong> and fill in the details in the pop-up modal.</li>
+                <li><strong>Mass add:</strong> upload an <code>.xlsx</code> with columns <code>KeypressName</code>, <code>NumKeys</code>, <code>Bunch</code> — then Confirm Upload.</li>
+                <li><strong>KeypressName</strong> = exact name of the keypress · <strong>NumKeys</strong> = keys on that bunch · <strong>Bunch</strong> = the bunch number.</li>
+              </ol>
+              <div class="fmt"><span>KeypressName,NumKeys,Bunch</span><button class="copy-btn" type="button" data-download="keys" data-fname="keyx_mass_add_keys.csv"><svg><use href="#i-download"/></svg>Template</button></div>
+            </div></div></div>
+          </div>
+
+          <div class="acc-item">
+            <button class="acc-head" type="button" aria-expanded="false">
+              <span class="ico"><svg><use href="#i-users"/></svg></span>
+              <span class="h"><span class="t">Whitelisting issuers · duty personnel</span><span class="s">Give a COS permission to issue keys</span></span>
+              <svg class="chev" width="20" height="20"><use href="#i-chevron"/></svg>
+            </button>
+            <div class="acc-body"><div><div class="acc-inner">
+              <ol>
+                <li>Select the keypress, then click <strong>Add Whitelist</strong> (or <strong>Mass Whitelist</strong>).</li>
+                <li>Enter the user's <strong>Full Name</strong> and <strong>NRIC</strong>.</li>
+                <li>For mass whitelist, upload an <code>.xlsx</code> with columns <code>KeypressName</code>, <code>Fullname</code>, <code>NRIC</code>.</li>
+              </ol>
+              <div class="fmt"><span>KeypressName,Fullname,NRIC</span><button class="copy-btn" type="button" data-download="whitelist" data-fname="keyx_mass_whitelist.csv"><svg><use href="#i-download"/></svg>Template</button></div>
+              <div class="callout mt-2">
+                <div class="ico"><svg><use href="#i-alert"/></svg></div>
+                <div><h4>Enter the full NRIC in ALL CAPS</h4><p>KeyX uses this exact text to match the user's SingPass login. If it's lowercase, they will be locked out.</p></div>
+              </div>
+            </div></div></div>
+          </div>
+
+          <div class="acc-item">
+            <button class="acc-head" type="button" aria-expanded="false">
+              <span class="ico"><svg><use href="#i-trash"/></svg></span>
+              <span class="h"><span class="t">Modifying inventory · deleting keys</span><span class="s">Select Keypress → Locate Key → Delete</span></span>
+              <svg class="chev" width="20" height="20"><use href="#i-chevron"/></svg>
+            </button>
+            <div class="acc-body"><div><div class="acc-inner">
+              <ol>
+                <li>Select the keypress, locate the key in the <strong>Keys List</strong>.</li>
+                <li>Click <strong>Delete</strong> on that row.</li>
+              </ol>
+              <div class="callout danger">
+                <div class="ico"><svg><use href="#i-alert"/></svg></div>
+                <div><h4>Cascading deletion risk</h4><p>Deleting <strong>all</strong> keys from a specific keypress will automatically delete the entire keypress structure as well. Remove individual keys deliberately.</p></div>
+              </div>
+            </div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================ FOOTER ================================ -->
+  <footer class="footer">
+    <div class="wrap">
+      <div class="cols">
+        <div style="max-width:32ch;">
+          <div class="word">Key<b>X</b></div>
+          <p>The digital keypress for units without EKMS. Transitioning from physical liability to digital cryptographic trust.</p>
+        </div>
+        <nav class="fnav" aria-label="Footer">
+          <a href="#/">Overview</a>
+          <a href="#/how">How it works</a>
+          <a href="#/demo">Live demo</a>
+          <a href="#/benefits">Benefits</a>
+          <a href="#/onboard">Onboard your unit</a>
+        </nav>
+        <div class="fnav">
+          <span class="text-muted mono" style="font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;">Onboarding contact</span>
+          <a href="https://wa.me/6587820742" target="_blank" rel="noopener">WhatsApp · Ranee</a>
+          <span class="text-muted mono">+65 8782 0742</span>
+        </div>
+      </div>
+      <p class="disclaimer">Unofficial onboarding &amp; learning companion for KeyX. Demonstration data only — no live keys, rolls or NRICs are stored. Handle personal data (names, NRIC, ORD dates) per your unit's security policy.</p>
+    </div>
+  </footer>
+</main>
+
+<!-- ============================ MOBILE TAB BAR ============================ -->
+<nav class="tabbar" aria-label="Primary mobile">
+  <a href="#/" data-route="/"><svg><use href="#i-grid"/></svg>Overview</a>
+  <a href="#/how" data-route="/how"><svg><use href="#i-shield"/></svg>How</a>
+  <a href="#/demo" data-route="/demo"><svg><use href="#i-eye"/></svg>Demo</a>
+  <a href="#/benefits" data-route="/benefits"><svg><use href="#i-bolt"/></svg>Benefits</a>
+  <a href="#/onboard" data-route="/onboard"><svg><use href="#i-rocket"/></svg>Onboard</a>
+</nav>
+
+<div class="toaster" id="toaster" aria-live="polite" aria-atomic="false"></div>
+
+<script src="assets/js/app.js" defer></script>
+</body>
+</html>
