@@ -373,6 +373,67 @@
     }
   });
 
+  /* ============================================= User guide + lightbox == */
+  (function guide() {
+    const shots = $$('.gshot');
+    if (!shots.length) return;
+    const lb = $('#lightbox'), lbImg = $('#lbImg'), lbCap = $('#lbCap');
+    const btnClose = $('#lbClose'), btnPrev = $('#lbPrev'), btnNext = $('#lbNext');
+    const parts = $$('.guide-part');
+    let list = shots.slice();
+    let idx = 0, lastFocus = null;
+
+    // role filter
+    $$('.gfilter').forEach((b) => b.addEventListener('click', () => {
+      const f = b.dataset.filter;
+      $$('.gfilter').forEach((x) => { const on = x === b; x.classList.toggle('active', on); x.setAttribute('aria-selected', String(on)); });
+      parts.forEach((p) => { p.hidden = !(f === 'all' || p.dataset.part === f); });
+    }));
+
+    const visibleShots = () => shots.filter((s) => !s.closest('.guide-part').hidden);
+
+    function show(i) {
+      idx = (i + list.length) % list.length;
+      const s = list[idx];
+      lbImg.src = s.dataset.img;
+      lbImg.alt = s.querySelector('img') ? s.querySelector('img').alt : (s.dataset.title || '');
+      lbCap.textContent = s.dataset.title || '';
+    }
+    function open(s) {
+      lastFocus = document.activeElement;
+      list = visibleShots();
+      show(list.indexOf(s));
+      lb.hidden = false; lb.classList.add('open');
+      document.body.classList.add('lb-open');
+      btnClose.focus();
+    }
+    function close() {
+      lb.classList.remove('open'); lb.hidden = true;
+      document.body.classList.remove('lb-open');
+      lbImg.src = '';
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    shots.forEach((s) => s.addEventListener('click', () => open(s)));
+    btnClose.addEventListener('click', close);
+    btnPrev.addEventListener('click', () => show(idx - 1));
+    btnNext.addEventListener('click', () => show(idx + 1));
+    lb.addEventListener('click', (e) => { if (e.target === lb) close(); });
+    document.addEventListener('keydown', (e) => {
+      if (lb.hidden) return;
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowLeft') show(idx - 1);
+      else if (e.key === 'ArrowRight') show(idx + 1);
+    });
+    let sx = null;
+    lb.addEventListener('touchstart', (e) => { sx = e.touches[0].clientX; }, { passive: true });
+    lb.addEventListener('touchend', (e) => {
+      if (sx === null) return;
+      const dx = e.changedTouches[0].clientX - sx;
+      if (Math.abs(dx) > 45) show(idx + (dx < 0 ? 1 : -1));
+      sx = null;
+    }, { passive: true });
+  })();
+
   /* ------------------------------------------------------------ Boot ----- */
   go(parseRoute());
 })();
