@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="KeyX">
+  <rect width="64" height="64" rx="15" fill="#0a121e"/>
+  <circle cx="32" cy="32" r="21" fill="none" stroke="#2f4a6e" stroke-width="2.4"
+          stroke-dasharray="70 12 20 12" stroke-linecap="round"/>
+  <!-- plain diagonal bar of the X -->
+  <line x1="20.5" y1="20.5" x2="43.5" y2="43.5" stroke="#2f80ff" stroke-width="6" stroke-linecap="round"/>
+  <!-- key forming the crossing diagonal -->
+  <g stroke="#eaf1fb" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="21.5" cy="42.5" r="5.4" stroke-width="3.4"/>
+    <line x1="25" y1="39" x2="43" y2="21" stroke-width="4.4"/>
+    <line x1="39.5" y1="24.5" x2="43.5" y2="28.5" stroke-width="3.6"/>
+    <line x1="35.5" y1="28.5" x2="38.5" y2="31.5" stroke-width="3.6"/>
+  </g>
+</svg>
