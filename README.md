@@ -61,4 +61,4 @@ data only** — no live keys, rolls, or NRICs are stored or transmitted; the che
 state lives in your browser's `localStorage`. When preparing real onboarding lists,
 handle personal data (names, NRIC, ORD dates) per your unit's security policy.
 
-Onboarding contact: **WhatsApp Ranee · +65 8782 0742**.
+Onboarding contact: **WhatsApp Ranee · +65 9699 1413**.
